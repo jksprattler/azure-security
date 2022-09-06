@@ -24,6 +24,7 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
+        shell: bash
     
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
