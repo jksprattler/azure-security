@@ -23,6 +23,7 @@ jobs:
             auto_apply: no             
     defaults:
       run:
+        shell: bash
         working-directory: ${{ matrix.directory }}
     
     env:
