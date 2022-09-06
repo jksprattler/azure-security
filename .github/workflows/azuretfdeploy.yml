@@ -1,0 +1,91 @@
+name: AzureTFDeploy
+
+on:
+  pull_request:
+
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Directory
+    runs-on: ubuntu-latest
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - directory: azure-dev-infra
+            auto_apply: no 
+          - directory: azuread-users-groups-roles
+            auto_apply: no             
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+        shell: bash
+    
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}      
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+#      - name: Az CLI login
+#        uses: azure/login@v1
+#        with:
+#          client-id: ${{ secrets.ARM_CLIENT_ID }}
+#          tenant-id: ${{ secrets.ARM_CLIENT_SECRET }}
+#          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}      
+
+      - name: "Terraform Format"
+        id: fmt
+        run: terraform fmt
+
+      - name: "Terraform Init"
+        id: init
+        run: terraform init
+
+      - name: "Terraform Validate"
+        id: validate
+        run: terraform validate -no-color
+
+      - name: "Terraform Plan"
+        id: plan
+        run: terraform plan -detailed-exitcode -out=ci.plan
+        continue-on-error: true
+        
+      - uses: actions/github-script@0.9.0
+        if: ${{ always() && github.event_name == 'pull_request' && !contains(steps.plan.outputs.exitcode, '0') }}
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            #### Directory: \'${{ matrix.directory }}\'
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`            
+      
+            <details><summary>Show Plan</summary>
+      
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+      
+            </details>
+      
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+      - name: "Terraform Plan Status"
+        if: ${{ !contains(steps.plan.outputs.exitcode, '0') && !contains(steps.plan.outputs.exitcode, '2') }}
+        run: exit 1
