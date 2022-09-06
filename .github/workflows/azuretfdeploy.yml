@@ -84,3 +84,6 @@ jobs:
             </details>
       
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+      - name: "Terraform Plan Status"
+        if: ${{ !contains(steps.plan.outputs.exitcode, '0') && !contains(steps.plan.outputs.exitcode, '2') }}
+        run: exit 1
