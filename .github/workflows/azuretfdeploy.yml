@@ -1,0 +1,31 @@
+on: [push]
+
+name: AzureTFDeploy
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1        
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Terraform Format"
+        id: fmt
+        run: terraform fmt
+
+      - name: "Terraform Init"
+        id: init
+        run: terraform init
+
+      - name: "Terraform Validate"
+        id: validate
+        run: terraform validate -no-color        
