@@ -59,7 +59,7 @@ resource "azuread_conditional_access_policy" "Art_access_policy" {
   state        = "enabled"
 
   conditions {
-    client_app_types    = ["all"]
+    client_app_types = ["all"]
 
     applications {
       included_applications = ["All"]
