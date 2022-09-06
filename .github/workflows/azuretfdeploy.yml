@@ -1,22 +1,42 @@
-on: [push]
-
 name: AzureTFDeploy
 
+on:
+  pull_request:
+
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
 jobs:
-  terraform:
-    name: "Terraform"
+  build:
+    name: Directory
     runs-on: ubuntu-latest
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - directory: azure-dev-infra
+            auto_apply: no 
+          - directory: azuread-users-groups-roles
+            auto_apply: no             
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}      
+
     steps:
       - name: "Checkout"
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1        
-
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        uses: hashicorp/setup-terraform@v1      
 
       - name: "Terraform Format"
         id: fmt
