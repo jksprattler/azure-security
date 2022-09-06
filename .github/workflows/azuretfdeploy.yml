@@ -24,7 +24,6 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
-        shell: bash
     
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
