@@ -72,10 +72,10 @@ jobs:
           script: |
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            -  Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            -  Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            -  Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            -  Terraform Plan 📖\`${{ steps.plan.outcome }}\`            
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`            
       
             <details><summary>Show Plan</summary>
       
@@ -86,6 +86,13 @@ jobs:
             </details>
       
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })    
       - name: "Terraform Plan Status"
         if: ${{ !contains(steps.plan.outputs.exitcode, '0') && !contains(steps.plan.outputs.exitcode, '2') }}
         run: exit 1
