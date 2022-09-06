@@ -62,7 +62,7 @@ jobs:
         run: terraform plan -detailed-exitcode -out=ci.plan
         continue-on-error: true
         
-      - uses: actions/github-script@0.9.0
+      - uses: actions/github-script@6
         if: ${{ always() && github.event_name == 'pull_request' && !contains(steps.plan.outputs.exitcode, '0') }}
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
