@@ -10,7 +10,7 @@ data "azurerm_resource_group" "artgroup" {
 # Azure custom role definitions
 resource "azurerm_role_definition" "Custom_storage_tfstate_role" {
   name        = "CustomStoragetfStateRole"
-  scope       = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/Microsoft.Storage/jennasrunbookstf"
+  scope       = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/providers/Microsoft.Storage/storageAccounts/jennasrunbookstfstate"
   description = "Custom storage role definition"
 
   permissions {
@@ -25,7 +25,7 @@ resource "azurerm_role_definition" "Custom_storage_tfstate_role" {
 
 # Provision Azure custom role assignments
 resource "azurerm_role_assignment" "Custom_storage_tfstate_role" {
-  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/Microsoft.Storage/jennasrunbookstf"
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/providers/Microsoft.Storage/storageAccounts/jennasrunbookstfstate"
   role_definition_name = "CustomStoragetfStateRole"
   principal_id         = azuread_group.Engineering.object_id
   description          = "Custom storage role for managing tf state blob"
