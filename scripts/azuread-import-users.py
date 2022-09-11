@@ -1,6 +1,6 @@
 #########################################################################
 # Extract a list of Azure AD user Display Names, Principal Names and 
-# Departments from your current ARM_SUBSCRIPTION_ID and generate Terraform 
+# Departments from your currently associated Azure tenant and generate Terraform 
 # code to be pasted into the main.tf file of this directory for managing AD users
 #########################################################################
 

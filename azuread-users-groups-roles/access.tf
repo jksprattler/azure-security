@@ -8,9 +8,9 @@ data "azurerm_resource_group" "artgroup" {
 }
 
 # Azure custom role definitions
-resource "azurerm_role_definition" "Custom_storage_role" {
-  name        = "CustomStorageRole"
-  scope       = data.azurerm_subscription.current.id
+resource "azurerm_role_definition" "Custom_storage_tfstate_role" {
+  name        = "CustomStoragetfStateRole"
+  scope       = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/providers/Microsoft.Storage/storageAccounts/jennasrunbookstfstate"
   description = "Custom storage role definition"
 
   permissions {
@@ -21,18 +21,16 @@ resource "azurerm_role_definition" "Custom_storage_role" {
     ]
     not_actions = []
   }
-
-  assignable_scopes = [data.azurerm_subscription.current.id]
-
 }
 
 # Provision Azure custom role assignments
-resource "azurerm_role_assignment" "Custom_storage_role" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_name = "CustomStorageRole"
+resource "azurerm_role_assignment" "Custom_storage_tfstate_role" {
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/centralus-jennasrunbookstf/providers/Microsoft.Storage/storageAccounts/jennasrunbookstfstate"
+  role_definition_name = "CustomStoragetfStateRole"
   principal_id         = azuread_group.Engineering.object_id
+  description          = "Custom storage role for managing tf state blob"
 
-  depends_on = [azurerm_role_definition.Custom_storage_role]
+  depends_on = [azurerm_role_definition.Custom_storage_tfstate_role]
 
 }
 
@@ -72,7 +70,7 @@ resource "azuread_conditional_access_policy" "Art_access_policy" {
   }
 
   grant_controls {
-    operator          = "AND"
+    operator          = "OR"
     built_in_controls = ["mfa"]
   }
 }
