@@ -70,7 +70,7 @@ resource "azuread_conditional_access_policy" "Art_access_policy" {
   }
 
   grant_controls {
-    operator          = "AND"
+    operator          = "OR"
     built_in_controls = ["mfa"]
   }
 }
