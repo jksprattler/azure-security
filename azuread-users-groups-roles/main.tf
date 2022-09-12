@@ -15,6 +15,14 @@ resource "azuread_user" "Bob_Ross" {
   force_password_change = true
 }
 
+resource "azuread_user" "raybrown" {
+  user_principal_name   = "raybrown@jennasrunbooks.com"
+  display_name          = "Ray Brown"
+  department            = "Art"
+  password              = "Super$ecret01@!"
+  force_password_change = true
+}
+
 # Provision Azure AD Groups
 data "azuread_client_config" "current" {}
 
