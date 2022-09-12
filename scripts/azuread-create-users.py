@@ -14,7 +14,7 @@ departmentName = input("User department (ex. Art): ")
 print () 
 
 print ('resource "azuread_user" "' + userPrincipalName + '" {')
-print('  user_principal_name   = "' + userPrincipalName, '@', domainName, sep='')
+print('  user_principal_name   = "' + userPrincipalName, '@', domainName + '"', sep='')
 print('  display_name          = "' + displayName + '"')
 print('  department            = "' + departmentName + '"') 
 print('  password              = "Super$ecret01@!"')
