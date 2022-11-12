@@ -27,8 +27,8 @@ resource "azuread_user" "raybrown" {
 data "azuread_client_config" "current" {}
 
 resource "azuread_group" "Readers" {
-  display_name     = "Readers"
-  owners           = [data.azuread_client_config.current.object_id]
+  display_name = "Readers"
+  #owners           = [azuread_user.Roy_Trenneman.object_id]
   security_enabled = true
   types            = ["DynamicMembership"]
 
@@ -52,7 +52,7 @@ resource "azuread_group" "Engineering" {
 
 resource "azuread_group" "Art" {
   display_name     = "Art"
-  owners           = [data.azuread_client_config.current.object_id]
+  owners           = [azuread_user.Bob_Ross.object_id]
   security_enabled = true
   types            = ["DynamicMembership"]
 
