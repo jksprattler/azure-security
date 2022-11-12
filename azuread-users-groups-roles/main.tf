@@ -40,7 +40,7 @@ resource "azuread_group" "Readers" {
 
 resource "azuread_group" "Engineering" {
   display_name     = "Engineering"
-  owners           = [data.azuread_client_config.current.object_id]
+  #owners           = [data.azuread_client_config.current.object_id]
   security_enabled = true
   types            = ["DynamicMembership"]
 
