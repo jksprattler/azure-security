@@ -1,11 +1,11 @@
 # Provision Azure AD Users
-resource "azuread_user" "Roy_Trenneman" {
-  user_principal_name   = "roytrenneman@jennasrunbooks.com"
-  display_name          = "Roy Trenneman"
-  department            = "Engineering"
-  password              = "Super$ecret01@!"
-  force_password_change = true
-}
+#resource "azuread_user" "Roy_Trenneman" {
+#  user_principal_name   = "roytrenneman@jennasrunbooks.com"
+#  display_name          = "Roy Trenneman"
+#  department            = "Engineering"
+#  password              = "Super$ecret01@!"
+#  force_password_change = true
+#}
 
 resource "azuread_user" "Bob_Ross" {
   user_principal_name   = "bobross@jennasrunbooks.com"
