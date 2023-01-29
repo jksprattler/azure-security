@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "centralus-jennasrunbookstf" {
   name     = "centralus-jennasrunbookstf"
   location = "Central US"
