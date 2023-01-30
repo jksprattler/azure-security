@@ -20,7 +20,9 @@ jobs:
           - directory: azure-dev-infra
             auto_apply: no 
           - directory: azuread-users-groups-roles
-            auto_apply: no             
+            auto_apply: no
+          - directory: azuread-users-groups-roles-pt2
+            auto_apply: no                          
     defaults:
       run:
         shell: bash

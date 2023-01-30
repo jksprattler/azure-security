@@ -2,7 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_subscription" "current" {}
 data "azurerm_resource_group" "artgroup" {
   name = azurerm_resource_group.artgroup.name
 }

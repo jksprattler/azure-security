@@ -1,0 +1,10 @@
+first_name,last_name,department,job_title,mail_nickname,preferred_language,usage_location
+UserA,Rose,Engineering,DBA,userarose,en,
+UserB,Orchid,Art,Painter,userborchid,ja,
+UserC,Tulip,Engineering,DevOps,userctulip,en,
+UserD,Lavender,Art,Photographer,userdlavender,fr,
+UserE,Lily,Art,Painter,userelily,en,
+UserF,Daffodil,Art,Sculptor,userfdaffodil,en,
+UserG,Marigold,Engineering,NOC,usergmarigold,en,
+UserH,Geranium,Engineering,SRE,userhgeranium,en,
+UserI,Petunia,Art,Sculptor,useripetunia,en,
