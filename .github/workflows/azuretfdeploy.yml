@@ -64,8 +64,7 @@ jobs:
       - name: "Terraform Version Check Env Var"
         run: |
           TFVC=$(cat tfvc_out.txt)
-          echo "TFVC<<EOF" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "TFVC=$TFVC" >> $GITHUB_ENV
         continue-on-error: true
       
       - name: "Terraform Format"
