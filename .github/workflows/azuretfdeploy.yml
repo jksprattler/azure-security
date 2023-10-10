@@ -61,9 +61,6 @@ jobs:
           TFVC=$(tfvc .)
           echo "TFVC=${TFVC}" >> $GITHUB_ENV
         continue-on-error: true
-
-      - name: Display tfvc output
-        run: echo "Terraform Version Check\n $TFVC"
       
       - name: "Terraform Format"
         id: fmt
@@ -111,7 +108,7 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            #### Terraform Version Check 🔖\`${TFVC}\`
+            #### Terraform Version Check 🔖\`${{ env.TFVC }}\`
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
