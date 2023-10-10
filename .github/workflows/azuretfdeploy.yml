@@ -63,7 +63,7 @@ jobs:
         continue-on-error: true
 
       - name: Display tfvc output
-        run: echo "Terraform Version Check:\n" ${{ env.TFVC }}
+        run: echo "Terraform Version Check\n $TFVC"
       
       - name: "Terraform Format"
         id: fmt
