@@ -8,9 +8,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.41.0"
     }
-    terraform = {
-      source  = "hashicorp/terraform"
-      version = "1.0.2"
-    }
   }
+  required_version = "~> 1.3.9"
 }
