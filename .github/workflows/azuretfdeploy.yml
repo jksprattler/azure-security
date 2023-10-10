@@ -41,14 +41,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.21.2
-
-      - name: Install tfvc
-        run: go install github.com/tfverch/tfvc@latest
-
 #      - name: Az CLI login
 #        uses: azure/login@v1
 #        with:
@@ -56,9 +48,19 @@ jobs:
 #          tenant-id: ${{ secrets.ARM_CLIENT_SECRET }}
 #          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21.2
+
+      - name: Install tfvc
+        run: go install github.com/tfverch/tfvc@latest
+        
       - name: "Terraform Version Check"
-        id: tfvc
-        run: tfvc .
+        id: display_tfvc_output
+        run: |
+          tfvc_output=$(tfvc .)
+          echo "Terraform Version Check: $tfvc_output"
         continue-on-error: true
 
       - name: "Terraform Format"
@@ -107,7 +109,7 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            #### Terraform Version Check 🔖\`${{ steps.tfvc.outcome }}\`
+            #### Terraform Version Check 🔖\`${{ steps.display_tfvc_output.outputs.tfvc_output }}\`
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
