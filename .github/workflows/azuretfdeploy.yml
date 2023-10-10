@@ -112,7 +112,7 @@ jobs:
             #### Terraform Version Check 🔖\`${{ status }}\` (${exitcode})
             <details><summary>Terraform Version Check</summary>
             \`\`\`\diff\n
-            ${{ env.PLAN }}
+            ${{ env.TFVC }}
             \`\`\`
 
             </details>
@@ -124,7 +124,7 @@ jobs:
             <details><summary>Show Plan</summary>
 
             \`\`\`\diff\n
-            ${{ env.TFVC }}
+            ${{ env.PLAN }}
             \`\`\`
 
             </details>
