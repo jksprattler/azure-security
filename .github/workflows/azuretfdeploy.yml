@@ -55,11 +55,17 @@ jobs:
 
       - name: Install tfvc
         run: go install github.com/tfverch/tfvc@latest
-        
-      - name: "Terraform Version Check"
+
+      - name: "Terraform Version Check Output"
         run: |
-          TFVC=$(tfvc .)
-          echo "TFVC=${TFVC}" >> $GITHUB_ENV
+          tfvc . > tfvc_out.txt
+        continue-on-error: true
+        
+      - name: "Terraform Version Check Env Var"
+        run: |
+          TFVC=$(cat tfvc_out.txt)
+          echo "TFVC<<EOF" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         continue-on-error: true
       
       - name: "Terraform Format"
