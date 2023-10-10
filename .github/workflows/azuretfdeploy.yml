@@ -116,9 +116,7 @@ jobs:
             #### Terraform Version Check 🔖\`${status}\` (${exitcode})
             <details><summary>Show Version Check</summary>
 
-            \`\`\`\diff\n
             ${{ env.TFVC }}
-            \`\`\`
 
             </details>
             
