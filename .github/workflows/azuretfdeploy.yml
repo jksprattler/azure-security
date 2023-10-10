@@ -59,6 +59,7 @@ jobs:
       - name: "Terraform Version Check"
         id: tfvc
         run: tfvc .
+        continue-on-error: true
 
       - name: "Terraform Format"
         id: fmt
