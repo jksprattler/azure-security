@@ -18,21 +18,21 @@ jobs:
       matrix:
         include:
           - directory: azure-dev-infra
-            auto_apply: no 
+            auto_apply: no
           - directory: azuread-users-groups-roles
             auto_apply: no
           - directory: azuread-users-groups-roles-pt2
-            auto_apply: no                          
+            auto_apply: no
     defaults:
       run:
         shell: bash
         working-directory: ${{ matrix.directory }}
-    
+
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}      
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
     steps:
       - name: "Checkout"
@@ -41,12 +41,19 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
+      - name: Install tfvc
+        run: brew install tfverch/tfvc/tfvc
+
 #      - name: Az CLI login
 #        uses: azure/login@v1
 #        with:
 #          client-id: ${{ secrets.ARM_CLIENT_ID }}
 #          tenant-id: ${{ secrets.ARM_CLIENT_SECRET }}
-#          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}      
+#          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: "Terraform Version Check"
+        id: tfvc
+        run: tfvc .
 
       - name: "Terraform Format"
         id: fmt
@@ -65,13 +72,13 @@ jobs:
         run: terraform plan -detailed-exitcode -no-color -out=plan -input=false
         continue-on-error: true
 
-      - name: Terraform Show 
-        id: show 
+      - name: Terraform Show
+        id: show
         if: steps.plan.outcome == 'success' || steps.plan.outputs.exitcode == '0' || steps.plan.outputs.exitcode == '2'
         run: terraform show -no-color plan > plan.txt
         continue-on-error: true
 
-      - name: Reformat Plan 
+      - name: Reformat Plan
         run: |
           cat plan.txt | sed -E 's/^([[:space:]]+)([-+~])/\2\1/g' > format_plan.txt
         continue-on-error: true
@@ -81,8 +88,8 @@ jobs:
           PLAN=$(cat format_plan.txt)
           echo "PLAN<<EOF" >> $GITHUB_ENV
           echo "${PLAN:0:65536}" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV                          
-        
+          echo "EOF" >> $GITHUB_ENV
+
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         #env:
@@ -94,19 +101,20 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
+            #### Terraform Version Check 🔖\`${{ steps.tfvc.outcome }}\`
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${status}\` (${exitcode})            
-      
+            #### Terraform Plan 📖\`${status}\` (${exitcode})
+
             <details><summary>Show Plan</summary>
-      
+
             \`\`\`\diff\n
             ${{ env.PLAN }}
             \`\`\`
-      
+
             </details>
-      
+
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
             github.issues.createComment({
