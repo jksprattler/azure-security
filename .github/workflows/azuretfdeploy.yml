@@ -114,7 +114,15 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            #### Terraform Version Check 🔖\`${{ env.TFVC }}\`
+            #### Terraform Version Check 🔖\`${status}\` (${exitcode})
+            <details><summary>Show Version Check</summary>
+
+            \`\`\`\diff\n
+            ${{ env.TFVC }}
+            \`\`\`
+
+            </details>
+            
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
