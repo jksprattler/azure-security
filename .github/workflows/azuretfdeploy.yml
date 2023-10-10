@@ -57,10 +57,10 @@ jobs:
         run: go install github.com/tfverch/tfvc@latest
         
       - name: "Terraform Version Check"
-        id: display_tfvc_output
         run: |
-          tfvc_output=$(tfvc .)
-          echo "Terraform Version Check: $tfvc_output"
+          TFVC=$(tfvc .)
+          echo "TFVC<<EOF" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: "Terraform Format"
@@ -109,7 +109,13 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            #### Terraform Version Check 🔖\`${{ steps.display_tfvc_output.outputs.tfvc_output }}\`
+            #### Terraform Version Check 🔖\`${{ status }}\` (${exitcode})
+            <details><summary>Terraform Version Check</summary>
+            \`\`\`\diff\n
+            ${{ env.PLAN }}
+            \`\`\`
+
+            </details>
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
@@ -118,7 +124,7 @@ jobs:
             <details><summary>Show Plan</summary>
 
             \`\`\`\diff\n
-            ${{ env.PLAN }}
+            ${{ env.TFVC }}
             \`\`\`
 
             </details>
