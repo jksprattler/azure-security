@@ -63,7 +63,7 @@ jobs:
         
       - name: "Terraform Version Check Env Var"
         run: |
-          TFVC=$(cat tfvc_out.txt)
+          TFVC=$(cat tfvc_out.txt | sed 's/\x1B\[[0-9;]*[JKmsu]//g')
           echo "TFVC=$TFVC" >> $GITHUB_ENV
         continue-on-error: true
       
