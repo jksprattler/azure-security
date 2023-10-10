@@ -109,7 +109,7 @@ jobs:
             const status = (exitcode == '0' || exitcode == '2') ? 'success' : 'failure';
             const output = `
             #### Directory: \'${{ matrix.directory }}\'
-            #### Terraform Version Check 🔖\`${{ status }}\` (${exitcode})
+            #### Terraform Version Check 🔖\`${status}\` (${exitcode})
             <details><summary>Terraform Version Check</summary>
             \`\`\`\diff\n
             ${{ env.TFVC }}
